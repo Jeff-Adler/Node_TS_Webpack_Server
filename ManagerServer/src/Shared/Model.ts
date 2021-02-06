@@ -8,6 +8,7 @@ export enum AccessRight {
   DELETE,
 }
 
+//extends username and password fields from Account
 export interface UserCredentials extends Account {
   accessRights: AccessRight[];
 }
