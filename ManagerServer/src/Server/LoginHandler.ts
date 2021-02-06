@@ -1,15 +1,22 @@
 import { throws } from 'assert';
 import { IncomingMessage, ServerResponse } from 'http';
-import { Account, Handler } from './Model';
+import { Account, Handler, TokenGenerator } from './Model';
 
 export class LoginHandler implements Handler {
-  constructor(private req: IncomingMessage, private res: ServerResponse) {}
+  constructor(
+    private req: IncomingMessage,
+    private res: ServerResponse,
+    private tokenGenerator: TokenGenerator
+  ) {}
 
   public async handleRequest(): Promise<void> {
-    console.log('before getting Body');
     const body = await this.getRequestBody();
-    console.log('request username: ' + body.username);
-    console.log('request password: ' + body.password);
+    const sessionToken = await this.tokenGenerator.generateToken(body);
+    if (sessionToken) {
+      this.res.write('valid credentials');
+    } else {
+      this.res.write('wrong credentials');
+    }
   }
 
   private async getRequestBody(): Promise<Account> {
