@@ -1,7 +1,8 @@
 import { throws } from 'assert';
 import { IncomingMessage, ServerResponse } from 'http';
+import { Account, Handler } from './Model';
 
-export class LoginHandler {
+export class LoginHandler implements Handler {
   constructor(private req: IncomingMessage, private res: ServerResponse) {}
 
   public async handleRequest(): Promise<void> {
@@ -11,7 +12,7 @@ export class LoginHandler {
     console.log('request password: ' + body.password);
   }
 
-  private async getRequestBody(): Promise<any> {
+  private async getRequestBody(): Promise<Account> {
     return new Promise((resolve, reject) => {
       let body = '';
       //possible responses to request
